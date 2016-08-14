@@ -1,0 +1,30 @@
+创建测试表
+create table student
+(
+id int primary key,
+name nvarchar2(50) not null,
+score number not null
+);
+insert into student values(1,'Aaron',78);
+insert into student values(2,'Bill',76);
+insert into student values(3,'Cindy',89);
+insert into student values(4,'Damon',90);
+insert into student values(5,'Ella',73);
+insert into student values(6,'Frado',61);
+insert into student values(7,'Gill',99);
+insert into student values(8,'Hellen',56);
+insert into student values(9,'Ivan',93);
+insert into student values(10,'Jay',90);
+
+Union，对两个结果集进行并集操作，不包括重复行，同时进行默认规则的排序；
+select * from student where id < 4 union select * from student where id > 2 and id < 6;
+
+Union All，对两个结果集进行并集操作，包括重复行，不进行排序；
+select * from student where id < 4 union all select * from student where id > 2 and id < 6;
+
+Intersect，对两个结果集进行交集操作，不包括重复行，同时进行默认规则的排序；
+select * from student where id < 4 intersect select * from student where id > 2 and id < 6;
+
+Minus，对两个结果集进行差操作，不包括重复行，同时进行默认规则的排序。
+说明：Minus返回的总是左边表中的数据，它返回的是差集。用左表-右表中的数据，如果相同，则去掉，否则返回左表中的数据。 
+select * from student where id < 4 minus select * from student where id > 2 and id < 6;

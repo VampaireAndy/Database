@@ -1,0 +1,178 @@
+【字符串函数】
+LOWER：返回字符串，并将所有的字符变成小写
+select lower('AaBbCcDd') lower from dual;
+
+UPPER：返回字符串，并将所有的字符变成大写
+select upper('AaBbCcDd') upper from dual;
+
+INITCAP：返回字符串，并将字符串的第一个字母变为大写
+select initcap('smith') INITCAP from dual;
+
+CONCAT：连接两个字符串
+select concat('010-','88888888') CONCAT from dual;
+
+SUBSTR：SUBSTR(string,start,count)，取子字符串,从start开始,取count个字符
+select substr('13088888888',3,8) SUBSTR from dual;
+
+LENGTH：返回字符串的长度
+create table table1(xm varchar(8));
+insert into table1(xm) values('hello');
+select length(xm) LENGTH from table1;
+drop table table1;
+
+INSTR：INSTR(C1,C2,I,J)，在一个字符串中搜索指定的字符,返回发现指定的字符的位置
+C1    源字符串
+C2    要查找的字符串
+I     从第几个字符开始。此参数可选，如果省略默认为1
+J     代表要查找第几次出现的C2。此参数可选，如果省略，默认为1
+select instr('oracle traning','ra',1,2) INSTR from dual;
+
+LPAD：lpad( string, padded_length, [ pad_string ] )，从左边对字符串使用指定的字符进行填充
+string         准备被填充的字符串
+padded_length  填充之后的字符串长度，也就是该函数返回的字符串长度，如果这个数量比原字符串的长度要短，lpad函数将会把字符串截取成从左到右的n个字符
+pad_string     填充字符串，是个可选参数，这个字符串是要粘贴到string的左边，如果这个参数未写，lpad函数将会在string的左边粘贴空格。
+select lpad('abcde',10,'x') from dual;
+select lpad('abcde',10,'oq') from dual;
+select lpad('abcde',2) from dual;
+
+RPAD：rpad(string,padded_length,[pad_string])，从右边对字符串使用指定的字符进行填充
+string         被填充的字符串
+padded_length  字节的长度，是返回的字节长度的字符串，如果这个数量比原字符串的字节长度要短，rpad函数将会把字符串截取成从左到右的n个字符;如果正好是中文要被截断，那么这个中文返回的是空格。
+pad_string     可选参数，这个字符串是要粘贴到string的右边，如果这个参数未写，rpad函数将会在string的右边粘贴空格。
+select rpad('tech', 7) from dual;
+select rpad('tech', 2) from dual;
+select rpad('tech', 8, '0') from dual;
+select rpad('tech on the net', 15, 'z') from dual;
+select rpad('tech on the net', 16, 'z') from dual;
+
+TRIM：删除任意指定的字符
+TRIM([ { { LEADING | TRAILING | BOTH }[ trim_character ]| trim_character} FROM ] trim_source)
+默认情况下同时删除字符串前后出现的空格
+select trim (' DWEYE ') "TRIM e.g." from dual;
+上面等同于下面
+select trim (both from ' DWEYE ') "TRIM e.g." from dual;
+使用“TRAILING”参数可以完成字符串尾部空格的删除功能
+select trim (trailing from ' DWEYE ') "TRIM e.g." from dual;
+使用“LEADING”参数可以完成字符串头部空格的删除功能
+select trim (leading from ' DWEYE ') "TRIM e.g." from dual;
+删除字符串'xxxxDWEYExxxx'前后出现的“x”
+select trim ('x' from 'xxxxDWEYExxxx') "TRIM e.g." from dual;
+配合“BOTH”、“TRAILING”和“LEADING”三个参数使用效果如下
+select trim (both 'x' from 'xxxxDWEYExxxx') "TRIM e.g." from dual;
+select trim (trailing 'x' from 'xxxxDWEYExxxx') "TRIM e.g." from dual;
+select trim (leading 'x' from 'xxxxDWEYExxxx') "TRIM e.g." from dual;
+注意：“trim_character”参数只允许包含一个字符，不支持多字符
+
+RTRIM：
+select rtrim('xyxxDWEYExyyx','xy') "e.g." from dual;
+LTRIM：
+select ltrim('xyxxDWEYExyyx','xy') "e.g." from dual;
+使用RTRIM和LTRIM函数时的注意事项：“xy”不表示整个“xy”字符串进行匹配，而是发现任意的字符“x”或字符“y”均做删除操作。
+
+**********************************************************************************************************************************************************
+
+【数学函数】
+round(n,[m]) ：该函数用于执行四舍五入。
+如果省掉m，则四舍五入到整数。
+如果m是正数，则四舍五入到小数点的m位后。
+如果m是负数，则四舍五入到小数点的m位前。
+select round(23.75123) from dual;
+select round(23.75123, 1) from dual;
+select round(23.75123, 2) from dual;
+select round(23.75123, 3) from dual;
+select round(23.75123, -1) from dual;
+select round(27.75123, -1) from dual;
+select round(23.75123, -3) from dual;
+
+trunc(n,[m])：该函数用于截取数字。
+如果省掉m，就截去小数部分。
+如果m是正数，就截取到小数点的m位后。
+如果m是负数，则截取到小数点的前m位。
+select trunc(23.75123) from dual;
+select trunc(23.75123, 1) from dual;
+select trunc(23.75123, 2) from dual;
+select trunc(23.75123, 3) from dual;
+select trunc(23.75123, -1) from dual;
+select trunc(27.75123, -1) from dual;
+select trunc(23.75123, -3) from dual;
+
+mod(m,n)：取余函数，即返回一个m除以n的余数。
+select mod(10,2) from dual;
+select mod(10,3) from dual;
+
+floor(n) ：返回小于或是等于n的最大整数
+select floor(24.56) from dual;
+
+ceil(n)：返回大于或是等于n的最小整数
+select ceil(24.56) from dual;
+
+abs(n)：返回数字n的绝对值
+select abs(100),abs(-100) from dual;
+
+*********************************************************************************************************************************************************
+
+【日期函数】
+sysdate：当前日期和时间
+select sysdate from dual;
+这里再介绍两个经常与日期合用的函数to_char和to_date
+to_char(date,'format')：把日期和时间转换为字符串 
+to_date(string,'format')：把字符串转换为数据库中的日期和时间类型
+输出当前的年份（两位）
+select to_char(sysdate,'YY') from dual;
+输出当前的季度
+select to_char(sysdate,'Q') from dual;
+输出当前的月份（两位）
+select to_char(sysdate,'MM') from dual;
+输出当前是本年度的第几周
+select to_char(sysdate,'WW') from dual;
+输出当前是本月的第几周
+select to_char(sysdate,'W') from dual;
+输出当前是本年度的第几天
+select to_char(sysdate,'DDD') from dual;
+输出当前是本月的第几天
+select to_char(sysdate,'DD') from dual;
+输出当前是一周中的星期几（注意：周日是一周中的第一天）
+select to_char(sysdate,'D') from dual;
+输出当前的小时（12小时制）
+select to_char(sysdate,'HH') from dual;
+输出当前的小时（24小时制）
+select to_char(sysdate,'HH24') from dual;
+输出当前的分钟
+select to_char(sysdate,'mi') from dual;
+输出当前的秒
+select to_char(sysdate,'ss') from dual;
+
+trunc：trunc(date,[fmt])，以指定元素格式截去一部分的日期值。
+设置sysdate显示的默认格式
+select * from v$nls_parameters;
+alter session set nls_date_format='YYYY-MM-DD HH24:MI:SS';
+fmt为空时的用法（默认情况下，sysdate函数返回的日期类型数据包括当前的具体时间。通过trunc(date)的处理，直接截取到天信息）：
+select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') from dual;
+select to_char(trunc(sysdate),'yyyy-mm-dd hh24:mi:ss') from dual;
+截断到年
+select trunc(sysdate,'yyyy') from dual;
+截断到月
+select trunc(sysdate,'mm') from dual;
+截断到日
+select trunc(sysdate,'dd') from dual;
+截断到时
+select trunc(sysdate,'hh24') from dual;
+截断到分
+select trunc(sysdate,'mi') from dual;
+注意：trunc不支持截断到秒
+
+last_day：返回本月最后一天
+select last_day(sysdate) from dual;
+
+add_months(d,n)：当前日期d往后推n个月，用于从一个日期值增加或减少一些月份
+select add_months(sysdate,2) from dual;
+
+months_between(f,s)：日期f和s间相差的月数
+select months_between(sysdate,to_date('2012-11-12','yyyy-mm-dd'))from dual;
+
+next_day(x,y)：用于计算x时间后第一个星期y的时间
+select next_day(sysdate,2）from dual;
+注意：y是星期一至星期日中的一个，用数字1-7代替，1是代表的周日，2才是代表的周一
+
+dbtimezone()：返回时区
+select dbtimezone from dual;

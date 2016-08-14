@@ -1,0 +1,32 @@
+【隐式转换】
+create table test1(
+id number
+);
+insert into test1(id) values(1);
+把字符隐式转为数字
+select * from test1 where id='1';
+
+create table test2(
+create_date varchar2(30)
+);
+insert into test2(create_date) values('2013-1-17 13:35:30');
+把字符隐式转为日期
+select * from test2 where create_date<sysdate;
+
+字符型隐式转换到数值型
+select '12.5' + 11 from dual;
+
+数值型转换到字符型
+select 11||'12.5' from dual;
+
+
+【显示转换】
+to_number:
+select to_number('234234') from dual;
+
+to_date:
+select to_date('2004-05-07 13:23:44','yyyy-mm-dd hh24:mi:ss') from dual;
+
+to_char:
+select to_char(123) from dual;
+select to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') from dual;

@@ -1,0 +1,128 @@
+CREATE [ [ LOCAL ] { TEMPORARY | TEMP } ] TABLE table_name (
+    { column_name data_type [ DEFAULT default_expr ] [ column_constraint [, ... ] ]
+    | table_constraint }  [, ... ]
+)
+[ INHERITS ( parent_table [, ... ] ) ]
+[ WITH OIDS | WITHOUT OIDS ]
+[ ON COMMIT { PRESERVE ROWS | DELETE ROWS | DROP } ]
+
+这里 column_constraint 可以是：
+
+[ CONSTRAINT constraint_name ]
+{ NOT NULL | NULL | UNIQUE | PRIMARY KEY |
+  CHECK (expression) |
+  REFERENCES reftable [ ( refcolumn ) ] [ MATCH FULL | MATCH PARTIAL ]    [ ON DELETE action ] [ ON UPDATE action ] }
+[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+而 table_constraint 可以是：
+
+[ CONSTRAINT constraint_name ]
+{ UNIQUE ( column_name [, ... ] ) |  PRIMARY KEY ( column_name [, ...
+] ) |
+  CHECK ( expression ) |
+  FOREIGN KEY ( column_name [, ...
+] ) REFERENCES reftable [ ( refcolumn [, ... ] ) ]
+    [ MATCH FULL | MATCH PARTIAL ] [ ON DELETE action ] [ ON UPDATE action ] }
+[ DEFERRABLE | NOT DEFERRABLE ] [ INITIALLY DEFERRED | INITIALLY IMMEDIATE ]
+
+
+[LOCAL] TEMPORARY 或 [LOCAL] TEMP
+如果声明了此参数，则该表创建为临时表
+
+table_name
+要创建的表的名字
+
+column_name
+在新表中要创建的字段名字
+
+data_type
+该字段的数据类型
+
+DEFAULT default_expr
+DEFAULT 子句给它所出现的字段一个缺省数值。该数值可以是任何不含变量的表达式，缺省表达式的数据类型必须和字段类型匹配。缺省表达式将被用于任何未声明该字段数值的插入操作。如果字段上没有缺省值，那么缺省是 NULL。
+
+CONSTRAINT constraint_name
+列或表约束的可选名字
+
+NOT NULL
+字段不允许包含 NULL 数值
+
+NULL
+该字段允许包含 NULL 数值．这是缺省
+
+UNIQUE
+UNIQUE 声明一个规则，该规则表示一个表里的一个或者多个独立的字段组合的分组只能包含唯一的数值
+
+PRIMARY KEY
+主键约束表明表中的一个或者一些字段只能包含唯一(不重复)非 NULL 的数值。从技术上讲，PRIMARY KEY 只是 UNIQUE 和 NOT NULL 的组合
+
+CHECK
+CHECK 约束声明一个完整性约束或者测试，一次插入或者更新操作若想成功则必须满足这个条件。每个约束都必须是一个生成布尔结果的表达式
+
+
+举例：
+CREATE TABLE films (
+    code        CHARACTER(5) CONSTRAINT firstkey PRIMARY KEY,
+    title       CHARACTER VARYING(40) NOT NULL,
+    did         DECIMAL(3) NOT NULL,
+    date_prod   DATE,
+    kind        CHAR(10)
+);
+
+定义一个唯一表约束． 唯一表约束可以在表的一个或多个字段上定义∶
+
+CREATE TABLE films1 (
+    code        CHAR(5),
+    title       VARCHAR(40),
+    did         DECIMAL(3),
+    date_prod   DATE,
+    kind        VARCHAR(10),
+    CONSTRAINT production UNIQUE(date_prod)
+);
+
+定义一个主键表约束． 主键表约束可以定义在表上的一个或多个字段．
+
+CREATE TABLE films2 (
+    code        CHAR(5),
+    title       VARCHAR(40),
+    did         DECIMAL(3),
+    date_prod   DATE,
+    kind        VARCHAR(10),
+    CONSTRAINT code_title PRIMARY KEY(code,title)
+);
+
+定义一个检查列约束∶
+
+CREATE TABLE distributors (
+    did     DECIMAL(3) CHECK (did > 100),
+    name    VARCHAR(40)
+);
+
+定义一个检查表约束∶
+
+CREATE TABLE distributors1 (
+    did     DECIMAL(3),
+    name    VARCHAR(40),
+    CONSTRAINT con1 CHECK (did > 100 AND name <> '')
+);
+
+定义两个 NOT NULL 列约束，其中之一明确给出了名字∶
+
+CREATE TABLE distributors2 (
+    did     DECIMAL(3) CONSTRAINT no_null NOT NULL,
+    name    VARCHAR(40) NOT NULL
+);
+
+
+
+列约束和表约束的差别，可以从两个方面理解：
+1 作用范围：列约束只能作用在一个列上，而表约束可以作用在多个列上（当然表约束也可以作用在一个列上）。
+2 定义方式：列约束必须跟在列的定义里后面，表约束不与列一起，而是单独定义的。
+另外，非空（not null)约束只能定义在列上。
+举个例子：
+create table t1(
+id number(4) primary key, -- 列约束
+name varchar2(4),
+type varchar2(4),
+constraint t1_un_nm_tp unique(name,type) --表约束
+);

@@ -1,0 +1,56 @@
+//建测试表
+create table dept(  
+       deptno number(3) primary key,  
+       dname varchar2(10),  
+       loc varchar2(13)   
+       );  
+create table employee_info(  
+       empno number(3),  
+       deptno number(3),  
+       ename varchar2(10),  
+       sex char(1),  
+       phone number(11),  
+       address varchar2(50),  
+       introduce varchar2(100)  
+       ); 
+
+
+修改表名
+rename dept to dt;
+rename dt to dept;（又改回来了）
+
+添加约束
+primary key
+alter table employee_info add constraint pk_emp_info primary key(empno);
+foreign key
+alter table employee_info add constraint fk_emp_info foreign key(deptno) references dept(deptno);
+check
+alter table employee_info add constraint ck_emp_info check (sex in ('F','M'));
+not null
+alter table employee_info modify phone constraint not_null_emp_info not null;
+unique
+alter table employee_info add constraint uq_emp_info unique(phone);
+default
+alter table employee_info modify sex default 'M';
+
+禁用约束
+alter table employee_info disable constraint uq_emp_info;
+启用约束
+alter table employee_info enable constraint uq_emp_info;
+
+添加列
+alter table employee_info add id varchar2(18);
+alter table employee_info add hiredate date default sysdate not null; 
+
+删除列
+alter table employee_info drop column introduce; 
+
+修改列
+修改列的长度
+alter table employee_info modify id varchar2(50);
+修改列的精度
+alter table employee_info modify empno number(2); 
+修改列的数据类型
+alter table employee_info modify sex varchar2(2);
+修改默认值
+alter table employee_info modify hiredate default sysdate+1; 

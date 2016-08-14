@@ -1,0 +1,116 @@
+员工表结构如下： 
+Name     Type         Nullable Default Comments 
+-------- ------------ -------- ------- -------- 
+EMPNO    NUMBER(4)                       员工号       
+ENAME    VARCHAR2(10) Y                  员工姓名       
+JOB      VARCHAR2(9)  Y                  工作       
+MGR      NUMBER(4)    Y                  上级编号       
+HIREDATE DATE         Y                  雇佣日期       
+SAL      NUMBER(7,2)  Y                  薪金       
+COMM     NUMBER(7,2)  Y                  佣金       
+DEPTNO   NUMBER(2)    Y                  部门编号
+
+create table emp(  
+       empo number(4) primary key,  
+       ename varchar2(10),  
+       job varchar2(9),
+       mgr number(4),
+       hiredate date,
+       sal number(7,2),
+       comm number(7,2),
+       deptno number(2)
+       );
+
+部门表结构如下：
+Name   Type         Nullable Default Comments 
+------ ------------ -------- ------- -------- 
+DEPTNO NUMBER(2)                         部门编号        
+DNAME  VARCHAR2(14) Y                    部门名称     
+LOC    VARCHAR2(13) Y                    地点 
+
+create table dept(
+        deptno number(2) primary key,
+        dname varchar2(14),
+        loc varchar2(13)
+        );
+
+emp表的现有数据如下：
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7369','SMITH','CLERK','7902',to_date('1980-12-17','yyyy-mm-dd'),'800.00',null,'20');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7499','ALLEN','SALESMAN','7698',to_date('1981-2-20','yyyy-mm-dd'),'1600.00','300.00','30');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7521','WARD','SALESMAN','7698',to_date('1981-2-22','yyyy-mm-dd'),'1250.00','500.00','30');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7566','JONES','MANAGER','7839',to_date('1981-4-2','yyyy-mm-dd'),'2975.00',null,'20');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7654','MARTIN','SALESMAN','7698',to_date('1981-9-28','yyyy-mm-dd'),'1250.00','1400.00','30');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7698','BLAKE','MANAGER','7839',to_date('1981-5-1','yyyy-mm-dd'),'2850.00',null,'30');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7782','CLARK','MANAGER','7839',to_date('1981-6-9','yyyy-mm-dd'),'2450.00',null,'10');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7788','SCOTT','ANALYST','7566',to_date('1987-4-19','yyyy-mm-dd'),'4000.00',null,'20');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7839','KING','PRESIDENT',null,to_date('1981-11-17','yyyy-mm-dd'),'5000.00',null,'10');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7844','TURNER','SALESMAN','7698',to_date('1981-9-8','yyyy-mm-dd'),'1500.00','0.00','30');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7876','ADAMS','CLERK','7788',to_date('1987-5-23','yyyy-mm-dd'),'1100.00',null,'20');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7900','JAMES','CLERK','7698',to_date('1981-12-3','yyyy-mm-dd'),'950.00',null,'30');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7902','FORD','ANALYST','7566',to_date('1981-12-3','yyyy-mm-dd'),'3000.00',null,'20');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('7934','MILLER','CLERK','7782',to_date('1982-1-23','yyyy-mm-dd'),'1300.00',null,'10');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('102','EricHu','Developer','1455',to_date('2011-5-26','yyyy-mm-dd'),'5500.00','14.00','10');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('104','huyong','PM','1455',to_date('2011-5-26','yyyy-mm-dd'),'5500.00','14.00','10');
+insert into emp(empo,ename,job,mgr,hiredate,sal,comm,deptno) values('105','WANGJING','Developer','1455',to_date('2011-5-26','yyyy-mm-dd'),'5500.00','14.00','10');
+
+dept表的现有数据如下：
+insert into dept(deptno,dname,loc) values('10','ACCOUNTING','NEW YORK');
+insert into dept(deptno,dname,loc) values('20','RESEARCH','DALLAS');
+insert into dept(deptno,dname,loc) values('30','SALES','CHICAGO');
+insert into dept(deptno,dname,loc) values('40','OPERATIONS','BOSTON');
+insert into dept(deptno,dname,loc) values('50','50abc','50def');
+insert into dept(deptno,dname,loc) values('60','Developer','HaiKou');
+
+select a.ename,a.sal,b.dname from emp a,dept b where a.deptno=b.deptno;
+
+
+
+建立测试表
+create table dave(
+id number,
+name varchar(10)
+);
+insert into dave(id,name) values('1','dave');
+insert into dave(id,name) values('2','bl');
+insert into dave(id,name) values('1','bl');
+insert into dave(id,name) values('2','dave');
+
+create table bl(
+id number,
+name varchar(10)
+);
+insert into bl(id,name) values('1','dave');
+insert into bl(id,name) values('2','bl');
+
+【内连接】
+select a.id,a.name,b.name from dave a inner join bl b on a.id=b.id;   -- 标准写法
+select a.id,a.name,b.name from dave a join bl b on a.id=b.id;  -- 这里省略了inner 关键字
+select a.id,a.name,b.name from dave a,bl b where a.id=b.id;  -- select 多表查询
+从这三个SQL的结果我们也可以看出，他们的作用是一样的。
+
+【外连接】
+在做实验之前，我们先将dave表和bl里加一些不同的数据，以方便测试。
+insert into dave(id,name) values('3','dba');
+insert into dave(id,name) values('4','sf-express');
+insert into dave(id,name) values('5','dmm');
+insert into dave(id,name) values('8','安庆');
+
+insert into bl(id,name) values('3','big bird');
+insert into bl(id,name) values('4','exc');
+insert into bl(id,name) values('9','怀宁');
+
+左外连接（Left outer join/ left join）
+left join是以左表的记录为基础的,示例中Dave可以看成左表,BL可以看成右表,它的结果集是Dave表中的数据，在加上Dave表和BL表匹配的数据。换句话说,左表(Dave)的记录将会全部表示出来,而右表(BL)只会显示符合搜索条件的记录。BL表记录不足的地方均为NULL.
+select * from dave a left join bl b on a.id = b.id;
+
+右外连接（right outer join/ right join）
+和left join的结果刚好相反,是以右表(BL)为基础的, 显示BL表的所以记录，在加上Dave和BL 匹配的结果。 Dave表不足的地方用NULL填充.
+select * from dave a right join bl b on a.id = b.id;
+
+全外连接（full outer join/ full join）
+左表和右表都不做限制，所有的记录都显示，两表不足的地方用null 填充。
+select * from dave a full join bl b on a.id = b.id;
+
+【自连接】
+查询每个员工和其上级的关系表（使用emp举例）
+select w.ename||' report for '||m.ename from emp w,emp m where w.mgr=m.empo;

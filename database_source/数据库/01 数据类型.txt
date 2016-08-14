@@ -1,0 +1,359 @@
+[char]
+定长字符串，会用空格来填充来达到其最大长度,最长2000个字节。Char类型是定长类型。它总会以空格来填充以达到一个固定宽度。使用char类型会浪费存储空间。
+Oracle的数据类型的长度单位是字节。一个汉字在oracle中是占用了两个字节的。英文字母或符号只占用一个字节。
+1．	新建一个测试表test_char.,只有一个char类型的列。长度为10 
+SQL> create table test_char(colA char(10)); 
+Table created 
+2．	向这个表中插入一些数据。 
+SQL> insert into test_char values('a'); 
+
+1 row inserted 
+
+SQL> insert into test_char values('aaaaaaaaaa'); 
+1 row inserted 
+
+注意：最多只能插入10个字节。否是就报错。 
+SQL> insert into test_char values('aaaaaaaaaaa'); 
+
+insert into test_char values('aaaaaaaaaaa') 
+
+ORA-12899: value too large for column "PUB_TEST"."TEST_CHAR"."COLA" (actual: 11, maximum: 10) 
+
+*******************************************************************************************************************************************
+
+
+[varchar2]
+一种变长的字符类型。最多可占用4000字节的存储空间。varchar2是存多少就占用多少空间。比较节省空间的。不会像char那样用空格填充。
+1.	创建一个表,只有一列，类型为varchar2,长度为10 
+SQL> create table test_varchar( col varchar2(10)); 
+
+Table created 
+2. 插入一些数据 
+SQL> insert into test_varchar values('a'); 
+
+1 row inserted
+
+SQL> insert into test_varchar values('aaaaaaaaaa'); 
+
+1 row inserted 
+
+注意：最多只能插入10个字节。否是就报错。
+SQL> insert into test_varchar values('aaaaaaaaaaa'); 
+
+*********************************************************************************************************************************************
+
+
+[number]
+1.新建一个表 
+SQL> create table test_number(col_number number(6,2)); 
+
+Table created
+2.插入一些不同的数据 
+SQL> insert into test_number values(-1); 
+
+1 row inserted 
+
+SQL> insert into test_number values(0); 
+
+1 row inserted 
+
+SQL> insert into test_number values(1); 
+
+1 row inserted 
+
+SQL> insert into test_number values(2); 
+
+1 row inserted 
+
+SQL> insert into test_number values(11.00); 
+
+1 row inserted 
+
+SQL> insert into test_number values(11.11); 
+
+1 row inserted 
+
+SQL> insert into test_number values(1234.12); 
+
+1 row inserted 
+
+SQL> insert into test_number values(-0.1); 
+
+1 row inserted 
+
+SQL> insert into test_number values(-11.11); 
+
+1 row inserted 
+
+SQL> insert into test_number values(-1234.12); 
+
+1 row inserted 
+SQL> commit; 
+
+Commit complete 
+
+3.查看结果 
+SQL> select * from test_number; 
+
+COL_NUMBER 
+---------- 
+     -1.00 
+      0.00 
+      1.00 
+      2.00 
+     11.00 
+     11.11 
+   1234.12 
+     -0.10 
+    -11.11 
+  -1234.12 
+
+10 rows selected
+
+精度与小数位的关系。精度并不是小数位加整数位之和。
+我们先看看小数位为0的情况。 
+SQL> create table test_number1(col_char varchar2(200), col_num number(10)); 
+
+Table created 
+Number(10).只定义了精度，小数位为0. 
+看看它可以存放的数据。 
+
+
+SQL> insert into test_number1 values('9999999999',9999999999); 
+
+1 row inserted 
+
+插入了10个9，没有问题，再插入多一位看看 
+SQL> insert into test_number1 values('99999999991',99999999991); 
+
+insert into test_number1 values('99999999991',99999999991) 
+
+ORA-01438: value larger than specified precision allowed for this column 
+
+报错了，精度不够。 
+再看看能不能再插入小数？ 
+SQL> insert into test_number1 values('0.9',0.9); 
+
+1 row inserted 
+
+
+SQL> select * from test_number1; 
+
+Col_char COL_NUM 
+--------------------	-------------- 
+9999999999	 9999999999 
+0.9	             1 
+
+注意插入数值0.9后，存储为1.这就是小数位的作用。在哪里进行舍入。
+带小数位和精度的情况。 
+SQL> create table test_number2(col_char varchar(20),col_num number(1,3)); 
+
+Table created 
+精度是1，小数位是3. 
+可见，精度不是小数位加整数位了。但是精度和小数位倒底什么关系呢？ 
+SQL> insert into test_number2 values('0.111',0.111); 
+
+insert into test_number2 values('0.111',0.111) 
+
+ORA-01438: value larger than specified precision allowed for this column 
+插入3位小数,0.111竟然报错了，说精度不够。 
+SQL> insert into test_number2 values('0.001',0.001); 
+
+1 row inserted 
+插入0.001时，成功了。 
+SQL> insert into test_number2 values('0.001',0.0015); 
+
+1 row inserted 
+插入0.0015也成功了。 
+看看插入的值。 
+SQL> select * from test_number2; 
+
+COL_CHAR             COL_NUM 
+-------------------- ------- 
+0.001                  0.001 
+0.0015                 0.002 
+需要注意的是0.0015被舍入为0.002 
+精度大于小数位 
+SQL> create table test_number3 (col_char varchar(20), col_number number(5,3)); 
+
+Table created 
+
+SQL> insert into test_number3 values('99.899',99.899); 
+
+1 row inserted 
+
+SQL> insert into test_number3 values('99.999',99.999); 
+
+1 row inserted 
+
+SQL> insert into test_number3 values('99.9999',99.9999); 
+
+insert into test_number3 values('99.9999',99.9999) 
+
+ORA-01438: value larger than specified precision allowed for this column 
+
+注意，当插入99.9999时，系统报错。因为小数位为3位。第四位小数位是9,于是往前入。最终变成100.000.就已经超过了精度。 
+Number(5,3)可存储的数值最大为99.999. 
+小数位为负数。 
+我们从前面知道，小数位的取值为-48 ~127 
+为什么小数位会为负数？这有点怪异了。像上面的number(5,3)将值舍入为最接近0.001 
+Number(5,-3)就是将值舍入为最接近的1000 
+
+SQL> create table test_number5 (col_char varchar(20), col_num number(5,-3)); 
+
+Table created 
+
+插入值10999 
+SQL> insert into test_number5 values('10999',10999); 
+
+1 row inserted 
+查看一下结果 
+SQL> select * from test_number5; 
+
+COL_CHAR             COL_NUM 
+-------------------- ------- 
+10999                  11000 
+存储的结果为：11000 
+当小数部分为负数时，是对整数部分进行舍入。 
+
+*********************************************************************************************************************************************
+
+
+[date]
+Date类型Oralce用于表示日期和时间的数据类型。固定占用7个字节。 
+包括七个属性： 
+世纪 
+世纪中的年份 
+月份 
+月份中的哪一天 
+小时 
+分 
+秒 
+SQL> create table test_date(col_date date); 
+
+Table created 
+SQL> insert into test_date values(to_date('2008-06-27 10:35:00','yyyy-mm-dd hh24:mi:ss')); 
+
+1 row inserted 
+
+SQL> select to_char(col_date,'yyyy-mm-dd hh24:mi:ss'),dump(col_date) from test_date; 
+
+TO_CHAR(COL_DATE,'YYYY-MM-DDHH DUMP(COL_DATE) 
+------------------------------ -------------------------------------------------------------------------------- 
+2008-06-27 10:35:00            Typ=12 Len=7: 120,108,6,27,11,36,1
+
+比如我们要查询2008年的所有数据，并且这一列上也有索引，我们希望能够用上这个索引。 
+SQL> select count(col_date) from test_date where col_date>to_date('2008-06-26','yyyy-mm-dd') and col_date<to_date('2008-06-28','yyyy-mm-dd');
+
+COUNT(COL_DATE) 
+--------------- 
+              1 
+
+怎么向Date类型增加时间，例如：向Date增加1天，或1小时，或1秒，一月等。 
+常有的办法有几个方法： 
+a.向date增加一个NUMBER值。因为Date 加减操作是以天为单位。1秒就是 1/24/60/60。依此类推。 
+b.使用INTERVAL类型。后续会介绍 
+c.使用内置函数add_months增加月。增加月不像增加天那么简单，所以需要使用内置函数来处理。 
+
+
+3.2.1  增加秒 
+SQL> create table test_date2(id varchar2(10), operate_time date); 
+
+Table created 
+
+SQL> insert into test_date2 values('1',sysdate); 
+
+1 row inserted 
+
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2008-06-27 13:35:35 
+SQL> update test_date2 set operate_time = operate_time + 1/24/60/60 where id=1; 
+
+1 row updated 
+
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2008-06-27 13:35:36 
+
+3.2.2 增加分 
+SQL> update test_date2 set operate_time = operate_time + 1/24/60 where id=1; 
+
+1 row updated 
+
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2008-06-27 13:36:36 
+
+3.2.3 增加小时 
+SQL> update test_date2 set operate_time = operate_time + 1/24 where id=1; 
+
+1 row updated 
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2008-06-27 14:36:36 
+
+3.2.4 增加天 
+SQL> update test_date2 set operate_time = operate_time + 1 where id=1; 
+
+1 row updated 
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2008-06-28 14:36:36 
+
+3.2.4 增加周 
+SQL> update test_date2 set operate_time = operate_time + 1 * 7 where id=1; 
+
+1 row updated 
+
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2008-07-05 14:36:36 
+3.2.5 增加月 
+SQL> update test_date2 set operate_time = add_months(operate_time,1)  where id=1; 
+
+1 row updated 
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2008-08-05 14:36:36 
+3.2.6 增加年 
+SQL> update test_date2 set operate_time = add_months(operate_time,1 * 12)  where id=1; 
+
+1 row updated 
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2009-08-05 14:36:36 
+
+另外可以使用一个非常有用的函数NUMTODSINTERVAL来新增加小时，分钟，秒。 
+SQL> update test_date2 set operate_time = operate_time + numtodsinterval(1,'second') where id=1; 
+
+1 row updated 
+SQL> select id, to_char(operate_time, 'yyyy-mm-dd hh24:mi:ss') from test_date2 where id=1; 
+
+ID         TO_CHAR(OPERATE_TIME,'YYYY-MM- 
+---------- ------------------------------ 
+1          2009-08-05 14:36:37 
+
+Numtodsinterval(n, 'second') 获得秒的时间间隔 
+Numtodsinterval(n, 'minute') 获得分的时间间隔
+Numtodsinterval(n, 'hour') 获得分的时间间隔
+Numtodsinterval(n, 'day') 获得天的时间间隔 
+ 
+numtoyminterval(n, 'month') 获得月的时间间隔 
+numtoyminterval(n, 'year') 获得月的时间间隔 
