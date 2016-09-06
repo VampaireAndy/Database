@@ -4,6 +4,10 @@
 										FROM table_name
 										WHERE condition
 										AND|OR condition
+				如果第一个条件和第二个条件都成立，则 AND 运算符显示一条记录。
+				如果第一个条件和第二个条件中只要有一个成立，则 OR 运算符显示一条记录。
+				
+				
 				
 				2.ALTER TABLE			ALTER TABLE table_name 
 										ADD column_name datatype
@@ -23,7 +27,7 @@
 										BETWEEN value1 AND value2
 				
 				
-				5.CREATE DATABASE	    	CREATE DATABASE database_name
+				5.CREATE DATABASE	    CREATE DATABASE database_name
 				
 				
 				6.CREATE TABLE			CREATE TABLE table_name
@@ -42,19 +46,22 @@
 										ON table_name (column_name)
 				
 				
-				8.CREATE VIEW				CREATE VIEW view_name AS
+				8.CREATE VIEW			CREATE VIEW view_name AS
 										SELECT column_name(s)
 										FROM table_name
 										WHERE condition
 				
 				
-				9.DELETE					DELETE FROM table_name
+				9.DELETE				DELETE FROM table_name
 										WHERE some_column=some_value
 										or
 										DELETE FROM table_name 
 										(Note: Deletes the entire table!!)
 										DELETE * FROM table_name 
 										(Note: Deletes the entire table!!)
+				DELETE 语句用于删除表中的行。
+				
+				
 				
 				
 				10.DROP DATABASE			DROP DATABASE database_name
@@ -90,12 +97,14 @@
 				
 				
 				
-				16.INSERT 					INTO	INSERT INTO table_name
+				16.INSERT INTO	        INSERT INTO table_name
 										VALUES (value1, value2, value3,....)
 										or
 										INSERT INTO table_name
 										(column1, column2, column3,...)
 										VALUES (value1, value2, value3,....)
+				INSERT INTO 语句用于向表中插入新记录。
+				
 				
 				
 				
@@ -131,6 +140,12 @@
 				22.ORDER BY				SELECT column_name(s)
 										FROM table_name
 										ORDER BY column_name [ASC|DESC]
+				ORDER BY 关键字用于对结果集按照一个列或者多个列进行排序。
+				ORDER BY 关键字默认按照升序对记录进行排序。
+				如果需要按照降序对记录进行排序，您可以使用 DESC 关键字。
+				
+				
+				
 				
 				
 				23.SELECT					SELECT column_name(s)
@@ -139,10 +154,15 @@
 				
 				24.SELECT *				SELECT *
 										FROM table_name
+						SELECT 语句用于从数据库中选取数据。结果被存储在一个结果表中，称为结果集。
+				
 				
 				
 				25.SELECT DISTINCT			SELECT DISTINCT column_name(s)
 										FROM table_name
+				在表中，一个列可能会包含多个重复值，有时您也许希望仅仅列出不同（distinct）的值。
+				DISTINCT 关键词用于返回唯一不同的值。
+				
 				
 				
 				26.SELECT INTO				SELECT *
@@ -172,8 +192,13 @@
 				30.UPDATE					UPDATE table_name
 										SET column1=value, column2=value,...
 										WHERE some_column=some_value
+				UPDATE 语句用于更新表中已存在的记录。
+				
 				
 				
 				31.WHERE					SELECT column_name(s)
 										FROM table_name
 										WHERE column_name operator value
+										
+						WHERE 子句用于提取那些满足指定标准的记录	
+										
